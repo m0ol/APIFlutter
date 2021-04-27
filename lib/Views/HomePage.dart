@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterapibloc/BusinessLogicBloc.dart';
+import 'package:flutterapibloc/rules/BusinessLogicBloc.dart';
 import 'package:flutterapibloc/Components/TextFieldADD.dart';
 import 'package:flutterapibloc/models/CepModel.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -21,6 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController campoBairro = TextEditingController();
   TextEditingController campoLocalidade = TextEditingController();
   TextEditingController campoUF = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,10 +40,8 @@ class _MyHomePageState extends State<MyHomePage> {
               inputFormatters: [maskFormatter],
               decoration: InputDecoration(
                   hintText: "Digite o Cep", border: OutlineInputBorder()),
-              //keyboardType: TextInputType.number,
             ),
-            //TextFieldADD(hint:"Rua", controllerText: "logradouro"),
-            //Center(
+
             StreamBuilder<CepModel>(
                 stream: bloc.output,
                 initialData: CepModel(
@@ -58,12 +57,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   campoLocalidade.text = "${model.localidade}";
                   campoUF.text = "${model.uf}";
 
-                  if (snapshot.hasError) {
-                    return Text(
-                      "Erro na Pesquisa",
-                      style: TextStyle(color: Colors.red),
-                    );
-                  }
                   if (snapshot.hasData) {
                     return Column(
                       children: [
@@ -85,18 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ],
                     );
-
-                    //);
-
-                    // ];
-
-                    // CepModel model = snapshot.data;
-                    // return;
-                    //campoLogradouro.text = "${model.logradouro}"
-                    //Text("Logradouro: ${model.logradouro}\n" +
-                    //  "Bairro:${model.bairro}\n" +
-                    //"Localidade: ${model.localidade}\n" +
-                    //"UF: ${model.uf}\n");
                   }
                 }),
             //)

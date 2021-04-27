@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 
-import 'models/CepModel.dart';
+import '../models/CepModel.dart';
 
 class BusinessLogicBloc {
   final StreamController<String> _streamController =
