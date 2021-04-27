@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme:
           ThemeData(brightness: Brightness.dark, primaryColor: Colors.blueGrey),
       title: 'Flutter API with BLOC',
-      home: MyHomePage(title: 'API/BLOC'),
+      home: MyHomePage(title: "APIBLOC"),
     );
   }
 }

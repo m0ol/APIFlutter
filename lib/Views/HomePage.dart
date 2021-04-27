@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapibloc/BusinessLogicBloc.dart';
+import 'package:flutterapibloc/Components/TextFieldADD.dart';
 import 'package:flutterapibloc/models/CepModel.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
   final String title;
+  MyHomePage({this.title});
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -17,6 +17,10 @@ class _MyHomePageState extends State<MyHomePage> {
   var maskFormatter = new MaskTextInputFormatter(
       mask: '#####-###', filter: {"#": RegExp(r'[0-9]')});
   BusinessLogicBloc bloc = BusinessLogicBloc();
+  TextEditingController campoLogradouro = TextEditingController();
+  TextEditingController campoBairro = TextEditingController();
+  TextEditingController campoLocalidade = TextEditingController();
+  TextEditingController campoUF = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,29 +41,65 @@ class _MyHomePageState extends State<MyHomePage> {
                   hintText: "Digite o Cep", border: OutlineInputBorder()),
               //keyboardType: TextInputType.number,
             ),
-            Center(
-              child: StreamBuilder<CepModel>(
-                  stream: bloc.output,
-                  initialData: CepModel(
-                    logradouro: "",
-                    bairro: "",
-                    localidade: "",
-                    uf: "",
-                  ),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text(
-                        "Erro na Pesquisa",
-                        style: TextStyle(color: Colors.red),
-                      );
-                    }
-                    CepModel model = snapshot.data;
-                    return Text("Logradouro: ${model.logradouro}\n" +
-                        "Bairro:${model.bairro}\n" +
-                        "Localidade: ${model.localidade}\n" +
-                        "UF: ${model.uf}\n");
-                  }),
-            )
+            //TextFieldADD(hint:"Rua", controllerText: "logradouro"),
+            //Center(
+            StreamBuilder<CepModel>(
+                stream: bloc.output,
+                initialData: CepModel(
+                  logradouro: campoLogradouro.text,
+                  bairro: "",
+                  localidade: "",
+                  uf: "",
+                ),
+                builder: (context, snapshot) {
+                  CepModel model = snapshot.data;
+                  campoLogradouro.text = "${model.logradouro}";
+                  campoBairro.text = "${model.bairro}";
+                  campoLocalidade.text = "${model.localidade}";
+                  campoUF.text = "${model.uf}";
+
+                  if (snapshot.hasError) {
+                    return Text(
+                      "Erro na Pesquisa",
+                      style: TextStyle(color: Colors.red),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        TextFieldADD(
+                          hint: "Rua",
+                          controllerText: campoLogradouro,
+                        ),
+                        TextFieldADD(
+                          hint: "Bairro",
+                          controllerText: campoBairro,
+                        ),
+                        TextFieldADD(
+                          hint: "Localidade",
+                          controllerText: campoLocalidade,
+                        ),
+                        TextFieldADD(
+                          hint: "UF",
+                          controllerText: campoUF,
+                        ),
+                      ],
+                    );
+
+                    //);
+
+                    // ];
+
+                    // CepModel model = snapshot.data;
+                    // return;
+                    //campoLogradouro.text = "${model.logradouro}"
+                    //Text("Logradouro: ${model.logradouro}\n" +
+                    //  "Bairro:${model.bairro}\n" +
+                    //"Localidade: ${model.localidade}\n" +
+                    //"UF: ${model.uf}\n");
+                  }
+                }),
+            //)
           ],
         ),
       ),
